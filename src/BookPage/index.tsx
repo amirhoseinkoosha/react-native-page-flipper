@@ -6,7 +6,7 @@ import {
 } from 'react-native-gesture-handler';
 import Animated, {
     Easing,
-    Extrapolate,
+    Extrapolation,
     interpolate,
     runOnJS,
     useAnimatedGestureHandler,
@@ -175,13 +175,13 @@ const BookPage = React.forwardRef<BookPageInstance, IBookPageProps>(
                       degrees,
                       [0, 90],
                       [containerWidth / 2, 0],
-                      Extrapolate.CLAMP
+                      Extrapolation.CLAMP
                   )
                 : interpolate(
                       degrees,
                       [-90, 0],
                       [0, containerWidth / 2],
-                      Extrapolate.CLAMP
+                      Extrapolation.CLAMP
                   );
 
             const style: ViewStyle = {
@@ -240,7 +240,7 @@ const BookPage = React.forwardRef<BookPageInstance, IBookPageProps>(
                     x.value,
                     [-containerWidth, 0, containerWidth],
                     [180, 0, -180],
-                    Extrapolate.CLAMP
+                    Extrapolation.CLAMP
                 );
 
                 if (onPageDrag && typeof onPageDrag === 'function') {

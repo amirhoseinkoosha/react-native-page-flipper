@@ -1,17 +1,6 @@
 import { runOnJS } from 'react-native-reanimated';
-import type { Page } from '../types';
-
-export const createPages = ({
-    portrait,
-    singleImageMode,
-    data,
-}: {
-    portrait: boolean;
-    singleImageMode: boolean;
-    data: string[];
-}) => {
-    const allPages: Page[] = [];
-
+export const createPages = ({ portrait, singleImageMode, data, }) => {
+    const allPages = [];
     if (portrait) {
         if (!singleImageMode) {
             data.forEach((page) => {
@@ -24,7 +13,8 @@ export const createPages = ({
                     right: page,
                 });
             });
-        } else {
+        }
+        else {
             for (let i = 0; i < data.length; i++) {
                 allPages[i] = {
                     left: data[i],
@@ -32,7 +22,8 @@ export const createPages = ({
                 };
             }
         }
-    } else {
+    }
+    else {
         for (let i = 0; i < data.length; i++) {
             if (singleImageMode) {
                 allPages.push({
@@ -40,7 +31,8 @@ export const createPages = ({
                     right: data[i + 1],
                 });
                 i++;
-            } else {
+            }
+            else {
                 allPages.push({
                     left: data[i],
                     right: data[i],
@@ -50,27 +42,11 @@ export const createPages = ({
     }
     return allPages;
 };
-
-type RNTransform = Array<
-    | { perspective: number }
-    | { translateX: number }
-    | { translateY: number }
-    | { scale: number }
-    | { rotate: string }
-    | { rotateX: string }
-    | { rotateY: string }
-    | { rotateZ: string }
->;
-export const transformOrigin = (
-    { x, y }: { x: number; y: number },
-    transformations: RNTransform
-): RNTransform => {
+export const transformOrigin = ({ x, y }, transformations) => {
     'worklet';
-
     const validTransformations = Array.isArray(transformations)
         ? transformations.filter((t) => typeof t === 'object')
         : [];
-
     return [
         { translateX: x },
         { translateY: y },
@@ -79,30 +55,21 @@ export const transformOrigin = (
         { translateY: -y },
     ];
 };
-
-const debug = (msg: string, val: any) => {
+const debug = (msg, val) => {
     console.log(msg, val);
 };
-
-export const debugValue = (msg: string, val: any) => {
+export const debugValue = (msg, val) => {
     'worklet';
     runOnJS(debug)(msg, val);
 };
-
-export const snapPoint = (
-    value: number,
-    velocity: number,
-    points: ReadonlyArray<number>
-): number => {
+export const snapPoint = (value, velocity, points) => {
     'worklet';
-
     const point = value + 0.25 * velocity;
     const deltas = points.map((p) => Math.abs(point - p));
     const minDelta = Math.min.apply(null, deltas);
     return points.filter((p) => Math.abs(point - p) === minDelta)[0];
 };
-
-export function clamp(number: number, min: number, max: number) {
+export function clamp(number, min, max) {
     'worklet';
     return Math.max(min, Math.min(number, max));
 }

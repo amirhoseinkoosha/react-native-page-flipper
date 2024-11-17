@@ -6,7 +6,7 @@ import {
 } from 'react-native-gesture-handler';
 import Animated, {
     Easing,
-    Extrapolate,
+    Extrapolation,
     interpolate,
     runOnJS,
     useAnimatedGestureHandler,
@@ -127,7 +127,7 @@ const BookPagePortrait = React.forwardRef<PortraitBookInstance, IBookPageProps>(
                 x,
                 [-containerSize.width, 0, containerSize.width],
                 [180, 0, -180],
-                Extrapolate.CLAMP
+                Extrapolation.CLAMP
             );
             return val;
         };
@@ -343,7 +343,7 @@ const IPage: React.FC<IPageProps> = ({
             rotationVal.value,
             [0, 160],
             [containerWidth, -20],
-            Extrapolate.CLAMP
+            Extrapolation.CLAMP
         );
 
         const style: ViewStyle = {
