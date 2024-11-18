@@ -9,7 +9,6 @@ import Animated, {
     Extrapolation,
     interpolate,
     runOnJS,
-    useAnimatedGestureHandler,
     useAnimatedStyle,
     useDerivedValue,
     useSharedValue,
@@ -138,74 +137,74 @@ const BookPagePortrait = React.forwardRef<PortraitBookInstance, IBookPageProps>(
             };
         });
 
-        const onPanGestureHandler = useAnimatedGestureHandler<
-            PanGestureHandlerGestureEvent,
-            { x: number }
-        >({
-            // @ts-ignore
-            onStart: (event, ctx) => {
-                ctx.x = x.value;
-                if (onPageDragStart && typeof onPageDragStart === 'function') {
-                    runOnJS(onPageDragStart)();
-                }
-            },
-            onActive: (event, ctx) => {
-                const newX = ctx.x + event.translationX;
-                const degrees = getDegreesForX(newX);
-                x.value = newX;
-                rotateYAsDeg.value = degrees;
-                if (onPageDrag && typeof onPageDrag === 'function') {
-                    runOnJS(onPageDrag)();
-                }
-            },
-            onEnd: (event) => {
-                if (onPageDragEnd && typeof onPageDragEnd === 'function') {
-                    runOnJS(onPageDragEnd)();
-                }
+        // const onPanGestureHandler = useAnimatedGestureHandler<
+        //     PanGestureHandlerGestureEvent,
+        //     { x: number }
+        // >({
+        //     // @ts-ignore
+        //     onStart: (event, ctx) => {
+        //         ctx.x = x.value;
+        //         if (onPageDragStart && typeof onPageDragStart === 'function') {
+        //             runOnJS(onPageDragStart)();
+        //         }
+        //     },
+        //     onActive: (event, ctx) => {
+        //         const newX = ctx.x + event.translationX;
+        //         const degrees = getDegreesForX(newX);
+        //         x.value = newX;
+        //         rotateYAsDeg.value = degrees;
+        //         if (onPageDrag && typeof onPageDrag === 'function') {
+        //             runOnJS(onPageDrag)();
+        //         }
+        //     },
+        //     onEnd: (event) => {
+        //         if (onPageDragEnd && typeof onPageDragEnd === 'function') {
+        //             runOnJS(onPageDragEnd)();
+        //         }
 
-                const snapTo = snapPoint(x.value, event.velocityX, pSnapPoints);
-                const id = snapTo > 0 ? -1 : snapTo < 0 ? 1 : 0;
+        //         const snapTo = snapPoint(x.value, event.velocityX, pSnapPoints);
+        //         const id = snapTo > 0 ? -1 : snapTo < 0 ? 1 : 0;
 
-                if (!next && id > 0) {
-                    // reset
-                    x.value = withTiming(0);
-                    rotateYAsDeg.value = withTiming(0);
-                    // runOnJS(onDrag)(false);
-                    return;
-                }
+        //         if (!next && id > 0) {
+        //             // reset
+        //             x.value = withTiming(0);
+        //             rotateYAsDeg.value = withTiming(0);
+        //             // runOnJS(onDrag)(false);
+        //             return;
+        //         }
 
-                const degrees = getDegreesForX(snapTo);
-                x.value = snapTo;
-                if (rotateYAsDeg.value === degrees) {
-                    // already same value
-                    // debugValue('already there');
-                    runOnJS(onPageFlip)(id, false);
-                } else {
-                    runOnJS(setIsAnimating)(true);
+        //         const degrees = getDegreesForX(snapTo);
+        //         x.value = snapTo;
+        //         if (rotateYAsDeg.value === degrees) {
+        //             // already same value
+        //             // debugValue('already there');
+        //             runOnJS(onPageFlip)(id, false);
+        //         } else {
+        //             runOnJS(setIsAnimating)(true);
 
-                    const progress =
-                        Math.abs(rotateYAsDeg.value - degrees) / 100;
-                    const duration = clamp(
-                        800 * progress - Math.abs(0.1 * event.velocityX),
-                        350,
-                        1000
-                    );
-                    rotateYAsDeg.value = withTiming(
-                        degrees,
-                        {
-                            ...timingConfig,
-                            duration: duration,
-                        },
-                        () => {
-                            if (snapTo === 0) {
-                                //
-                            }
-                            runOnJS(onPageFlip)(id, false);
-                        }
-                    );
-                }
-            },
-        });
+        //             const progress =
+        //                 Math.abs(rotateYAsDeg.value - degrees) / 100;
+        //             const duration = clamp(
+        //                 800 * progress - Math.abs(0.1 * event.velocityX),
+        //                 350,
+        //                 1000
+        //             );
+        //             rotateYAsDeg.value = withTiming(
+        //                 degrees,
+        //                 {
+        //                     ...timingConfig,
+        //                     duration: duration,
+        //                 },
+        //                 () => {
+        //                     if (snapTo === 0) {
+        //                         //
+        //                     }
+        //                     runOnJS(onPageFlip)(id, false);
+        //                 }
+        //             );
+        //         }
+        //     },
+        // });
 
         const gesturesEnabled = enabled && !isAnimating;
 
@@ -220,7 +219,7 @@ const BookPagePortrait = React.forwardRef<PortraitBookInstance, IBookPageProps>(
         return (
             <Animated.View style={containerStyle}>
                 <PanGestureHandler
-                    onGestureEvent={onPanGestureHandler}
+                    
                     enabled={gesturesEnabled}
                 >
                     <Animated.View style={containerStyle}>

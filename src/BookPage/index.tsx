@@ -9,7 +9,6 @@ import Animated, {
     Extrapolation,
     interpolate,
     runOnJS,
-    useAnimatedGestureHandler,
     useAnimatedStyle,
     useSharedValue,
     withTiming,
@@ -222,70 +221,70 @@ const BookPage = React.forwardRef<BookPageInstance, IBookPageProps>(
             };
         });
 
-        const onPanGestureHandler = useAnimatedGestureHandler<
-            PanGestureHandlerGestureEvent,
-            { x: number }
-        >({
-            // @ts-ignore
-            onStart: (event, ctx) => {
-                if (onPageDragStart && typeof onPageDragStart === 'function') {
-                    runOnJS(onPageDragStart)();
-                }
-                ctx.x = x.value;
-            },
-            onActive: (event, ctx) => {
-                runOnJS(onDrag)(true);
-                x.value = ctx.x + event.translationX;
-                rotateYAsDeg.value = interpolate(
-                    x.value,
-                    [-containerWidth, 0, containerWidth],
-                    [180, 0, -180],
-                    Extrapolation.CLAMP
-                );
+        // const onPanGestureHandler = useAnimatedGestureHandler<
+        //     PanGestureHandlerGestureEvent,
+        //     { x: number }
+        // >({
+        //     // @ts-ignore
+        //     onStart: (event, ctx) => {
+        //         if (onPageDragStart && typeof onPageDragStart === 'function') {
+        //             runOnJS(onPageDragStart)();
+        //         }
+        //         ctx.x = x.value;
+        //     },
+        //     onActive: (event, ctx) => {
+        //         runOnJS(onDrag)(true);
+        //         x.value = ctx.x + event.translationX;
+        //         rotateYAsDeg.value = interpolate(
+        //             x.value,
+        //             [-containerWidth, 0, containerWidth],
+        //             [180, 0, -180],
+        //             Extrapolation.CLAMP
+        //         );
 
-                if (onPageDrag && typeof onPageDrag === 'function') {
-                    runOnJS(onPageDrag)();
-                }
-            },
-            onEnd: (event) => {
-                if (onPageDragEnd && typeof onPageDragEnd === 'function') {
-                    runOnJS(onPageDragEnd)();
-                }
+        //         if (onPageDrag && typeof onPageDrag === 'function') {
+        //             runOnJS(onPageDrag)();
+        //         }
+        //     },
+        //     onEnd: (event) => {
+        //         if (onPageDragEnd && typeof onPageDragEnd === 'function') {
+        //             runOnJS(onPageDragEnd)();
+        //         }
 
-                const snapTo = snapPoint(x.value, event.velocityX, pSnapPoints);
-                const id = snapTo > 0 ? -1 : snapTo < 0 ? 1 : 0;
-                const degrees = snapTo > 0 ? -180 : snapTo < 0 ? 180 : 0;
-                x.value = snapTo;
+        //         const snapTo = snapPoint(x.value, event.velocityX, pSnapPoints);
+        //         const id = snapTo > 0 ? -1 : snapTo < 0 ? 1 : 0;
+        //         const degrees = snapTo > 0 ? -180 : snapTo < 0 ? 180 : 0;
+        //         x.value = snapTo;
 
-                if (rotateYAsDeg.value === degrees) {
-                    runOnJS(onPageFlip)(id, false);
-                } else {
-                    runOnJS(setIsAnimating)(true);
+        //         if (rotateYAsDeg.value === degrees) {
+        //             runOnJS(onPageFlip)(id, false);
+        //         } else {
+        //             runOnJS(setIsAnimating)(true);
 
-                    const progress =
-                        Math.abs(rotateYAsDeg.value - degrees) / 100;
-                    const duration = clamp(
-                        800 * progress - Math.abs(0.1 * event.velocityX),
-                        350,
-                        1000
-                    );
+        //             const progress =
+        //                 Math.abs(rotateYAsDeg.value - degrees) / 100;
+        //             const duration = clamp(
+        //                 800 * progress - Math.abs(0.1 * event.velocityX),
+        //                 350,
+        //                 1000
+        //             );
 
-                    rotateYAsDeg.value = withTiming(
-                        degrees,
-                        {
-                            ...timingConfig,
-                            duration: duration,
-                        },
-                        () => {
-                            if (snapTo === 0) {
-                                runOnJS(onDrag)(false);
-                            }
-                            runOnJS(onPageFlip)(id, false);
-                        }
-                    );
-                }
-            },
-        });
+        //             rotateYAsDeg.value = withTiming(
+        //                 degrees,
+        //                 {
+        //                     ...timingConfig,
+        //                     duration: duration,
+        //                 },
+        //                 () => {
+        //                     if (snapTo === 0) {
+        //                         runOnJS(onDrag)(false);
+        //                     }
+        //                     runOnJS(onPageFlip)(id, false);
+        //                 }
+        //             );
+        //         }
+        //     },
+        // });
 
         if (!front || !back) {
             return null;
@@ -297,10 +296,7 @@ const BookPage = React.forwardRef<BookPageInstance, IBookPageProps>(
         const frontUrl = right ? front.right : front.left;
         const backUrl = right ? back.left : back.right;
         return (
-            <PanGestureHandler
-                onGestureEvent={onPanGestureHandler}
-                enabled={gesturesEnabled}
-            >
+            <PanGestureHandler enabled={gesturesEnabled}>
                 <Animated.View style={containerStyle}>
                     {isPressable && (
                         <Pressable

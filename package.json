@@ -1,6 +1,6 @@
 {
     "name": "react-native-pages-flipper",
-    "version": "1.0.5",
+    "version": "1.1.1",
     "description": "Page Flipper",
     "main": "lib/commonjs/index",
     "types": "lib/typescript/index.d.ts",
@@ -55,7 +55,7 @@
         "react": "^18.3.1",
         "react-native": "^0.76.2",
         "react-native-builder-bob": "^0.18.1",
-        "react-native-gesture-handler": "~2.20.2",
+        "react-native-gesture-handler": "^2.20.2",
         "react-native-linear-gradient": "^2.8.3",
         "react-native-reanimated": "^3.16.1",
         "typescript": "^5.3.3"
